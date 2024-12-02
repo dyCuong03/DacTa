@@ -249,3 +249,4 @@ D:\Dacta\SmartDevice\SmartDevice\obj\Debug\net8.0\refint\SmartDevice.dll
 D:\Dacta\SmartDevice\SmartDevice\obj\Debug\net8.0\SmartDevice.pdb
 D:\Dacta\SmartDevice\SmartDevice\obj\Debug\net8.0\SmartDevice.genruntimeconfig.cache
 D:\Dacta\SmartDevice\SmartDevice\obj\Debug\net8.0\ref\SmartDevice.dll
+D:\Dacta\SmartDevice\SmartDevice\obj\Debug\net8.0\SmartDevice.sourcelink.json
