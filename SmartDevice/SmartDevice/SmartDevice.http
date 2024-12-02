@@ -1,0 +1,6 @@
+@SmartDevice_HostAddress = http://localhost:5283
+
+GET {{SmartDevice_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
