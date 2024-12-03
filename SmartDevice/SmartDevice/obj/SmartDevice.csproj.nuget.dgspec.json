@@ -13,6 +13,7 @@
         "packagesPath": "C:\\Users\\duycu\\.nuget\\packages\\",
         "outputPath": "D:\\Dacta\\SmartDevice\\SmartDevice\\obj\\",
         "projectStyle": "PackageReference",
+        "UsingMicrosoftNETSdk": false,
         "configFilePaths": [
           "C:\\Users\\duycu\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],

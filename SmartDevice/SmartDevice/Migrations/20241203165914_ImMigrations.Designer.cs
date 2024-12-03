@@ -12,8 +12,8 @@ using SmartDevice.Datas;
 namespace SmartDevice.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241202181020_IMigration")]
-    partial class IMigration
+    [Migration("20241203165914_ImMigrations")]
+    partial class ImMigrations
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -108,11 +108,8 @@ namespace SmartDevice.Migrations
 
             modelBuilder.Entity("SmartDevice.Models.Brand", b =>
                 {
-                    b.Property<int>("BrandId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("BrandId"));
+                    b.Property<string>("BrandId")
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("BrandName")
                         .HasMaxLength(250)
@@ -125,11 +122,8 @@ namespace SmartDevice.Migrations
 
             modelBuilder.Entity("SmartDevice.Models.Customer", b =>
                 {
-                    b.Property<int>("CustomerId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("CustomerId"));
+                    b.Property<string>("CustomerId")
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("Address")
                         .HasMaxLength(250)
@@ -154,16 +148,14 @@ namespace SmartDevice.Migrations
 
             modelBuilder.Entity("SmartDevice.Models.Product", b =>
                 {
-                    b.Property<int>("ProductId")
-                        .ValueGeneratedOnAdd()
+                    b.Property<string>("ProductId")
                         .HasMaxLength(250)
-                        .HasColumnType("int");
+                        .HasColumnType("varchar(250)");
 
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("ProductId"));
-
-                    b.Property<int>("BrandId")
+                    b.Property<string>("BrandId")
+                        .IsRequired()
                         .HasMaxLength(250)
-                        .HasColumnType("int");
+                        .HasColumnType("varchar(250)");
 
                     b.Property<string>("ColorOptions")
                         .HasMaxLength(250)
@@ -181,9 +173,8 @@ namespace SmartDevice.Migrations
                         .HasMaxLength(250)
                         .HasColumnType("varchar(250)");
 
-                    b.Property<string>("Image")
-                        .HasMaxLength(250)
-                        .HasColumnType("varchar(250)");
+                    b.Property<byte[]>("Image")
+                        .HasColumnType("longblob");
 
                     b.Property<decimal?>("PowerConsumption")
                         .HasColumnType("decimal(65,30)");
@@ -192,9 +183,10 @@ namespace SmartDevice.Migrations
                         .HasMaxLength(250)
                         .HasColumnType("varchar(250)");
 
-                    b.Property<int>("ProductTypeId")
+                    b.Property<string>("ProductTypeId")
+                        .IsRequired()
                         .HasMaxLength(250)
-                        .HasColumnType("int");
+                        .HasColumnType("varchar(250)");
 
                     b.Property<decimal>("Quantity")
                         .HasColumnType("decimal(65,30)");
@@ -223,8 +215,8 @@ namespace SmartDevice.Migrations
 
             modelBuilder.Entity("SmartDevice.Models.ProductDetails", b =>
                 {
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
+                    b.Property<string>("ProductId")
+                        .HasColumnType("varchar(250)");
 
                     b.Property<string>("SerialNumber")
                         .HasMaxLength(250)
@@ -241,11 +233,8 @@ namespace SmartDevice.Migrations
 
             modelBuilder.Entity("SmartDevice.Models.ProductType", b =>
                 {
-                    b.Property<int>("ProductTypeId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("ProductTypeId"));
+                    b.Property<string>("ProductTypeId")
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("ProductTypeName")
                         .HasMaxLength(250)
@@ -258,17 +247,18 @@ namespace SmartDevice.Migrations
 
             modelBuilder.Entity("SmartDevice.Models.PurchaseDetails", b =>
                 {
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
+                    b.Property<string>("ProductId")
+                        .HasColumnType("varchar(250)");
 
-                    b.Property<int>("PurchaseInvoiceId")
-                        .HasColumnType("int");
+                    b.Property<string>("PurchaseInvoiceId")
+                        .HasColumnType("varchar(255)");
 
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(65,30)");
 
-                    b.Property<int>("SupplierId")
-                        .HasColumnType("int");
+                    b.Property<string>("SupplierId")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
 
                     b.HasKey("ProductId", "PurchaseInvoiceId");
 
@@ -281,17 +271,15 @@ namespace SmartDevice.Migrations
 
             modelBuilder.Entity("SmartDevice.Models.PurchaseInvoice", b =>
                 {
-                    b.Property<int>("PurchaseInvoiceId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("PurchaseInvoiceId"));
+                    b.Property<string>("PurchaseInvoiceId")
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("ApplicationUserId")
                         .HasColumnType("varchar(255)");
 
-                    b.Property<int>("EmployeeId")
-                        .HasColumnType("int");
+                    b.Property<string>("EmployeeId")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<DateTime>("InvoiceDate")
                         .HasColumnType("datetime(6)");
@@ -308,11 +296,11 @@ namespace SmartDevice.Migrations
 
             modelBuilder.Entity("SmartDevice.Models.SalesDetails", b =>
                 {
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
+                    b.Property<string>("ProductId")
+                        .HasColumnType("varchar(250)");
 
-                    b.Property<int>("SalesInvoiceId")
-                        .HasColumnType("int");
+                    b.Property<string>("SalesInvoiceId")
+                        .HasColumnType("varchar(255)");
 
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(65,30)");
@@ -326,20 +314,19 @@ namespace SmartDevice.Migrations
 
             modelBuilder.Entity("SmartDevice.Models.SalesInvoice", b =>
                 {
-                    b.Property<int>("SalesInvoiceId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("SalesInvoiceId"));
+                    b.Property<string>("SalesInvoiceId")
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("ApplicationUserId")
                         .HasColumnType("varchar(255)");
 
-                    b.Property<int>("CustomerId")
-                        .HasColumnType("int");
+                    b.Property<string>("CustomerId")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
 
-                    b.Property<int>("EmployeeId")
-                        .HasColumnType("int");
+                    b.Property<string>("EmployeeId")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<DateTime>("InvoiceDate")
                         .HasColumnType("datetime(6)");
@@ -358,11 +345,8 @@ namespace SmartDevice.Migrations
 
             modelBuilder.Entity("SmartDevice.Models.Supplier", b =>
                 {
-                    b.Property<int>("SupplierId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("SupplierId"));
+                    b.Property<string>("SupplierId")
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("Address")
                         .HasMaxLength(250)

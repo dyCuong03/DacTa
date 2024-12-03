@@ -5,6 +5,6 @@ namespace SmartDevice.Models;
 public class ProductType
 {
     [Key]
-    public int ProductTypeId { get; set; }
+    public string ProductTypeId { get; set; }
     [MaxLength(250)] public string? ProductTypeName { get; set; }
 }

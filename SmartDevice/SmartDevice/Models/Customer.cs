@@ -4,7 +4,7 @@ namespace SmartDevice.Models;
 
 public class Customer
 {
-    [Key] public required int CustomerId { get; set; }
+    [Key] public required string CustomerId { get; set; }
     [MaxLength(250)] public string? CustomerName { get; set; }
     [MaxLength(250)] public string? Address { get; set; }
     [MaxLength(250)] public string? PhoneNumber { get; set; }

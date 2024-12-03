@@ -4,6 +4,6 @@ namespace SmartDevice.Models;
 
 public class Brand
 {
-    [Key] public required int BrandId { get; set; }
+    [Key] public required string BrandId { get; set; }
     [MaxLength(250)] public string? BrandName { get; set; }
 }
