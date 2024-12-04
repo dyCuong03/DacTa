@@ -1,8 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using SmartDevice.Models.Interfaces;
 
 namespace SmartDevice.Models;
 
-public class SalesInvoice
+public class SalesInvoice: ISaleInvoice
 {
     [Key]
     public required string SalesInvoiceId { get; set; }

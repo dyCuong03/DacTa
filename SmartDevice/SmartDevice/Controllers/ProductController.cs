@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using SmartDevice.Datas;
 using SmartDevice.DTOs;
 using SmartDevice.Models;
@@ -7,7 +8,7 @@ namespace SmartDevice.Controllers;
 
 [Route("api/[controller]/[action]")]
 [ApiController]
-public class ProductController:ControllerBase
+public class ProductController : ControllerBase
 {
     private readonly ApplicationDbContext _context;
 
@@ -15,6 +16,12 @@ public class ProductController:ControllerBase
     {
         _context = context;
     }
+
+    [HttpGet]
+    public async Task<IActionResult> GetProducts()
+        => Ok(await _context.Products
+            .Include(c => c.Brand)
+            .ToListAsync());
     
     [HttpPost]
     public async Task<IActionResult> InsertProduct([FromForm] ProductDto productDto)
@@ -48,6 +55,6 @@ public class ProductController:ControllerBase
         _context.Products.Add(product);
         await _context.SaveChangesAsync();
 
-        return Ok(new { Message = "Product added successfully",  product.ProductId });
+        return Ok(new { Message = "Product added successfully", product.ProductId });
     }
 }

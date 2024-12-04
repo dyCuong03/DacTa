@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 using SmartDevice.Datas;
 using SmartDevice.DTOs;
@@ -22,6 +23,14 @@ public class AuthenticationController : ControllerBase
         _context = context;
     }
 
+    [HttpGet]
+    public async Task<IActionResult> GetUser(string userName)
+    {
+        var user = await _userManager.FindByNameAsync(userName);
+        return Ok(user);
+    }
+    
+
     [HttpPost]
     public async Task<IActionResult> Register([FromBody] RegisterDto registerDto)
     {
@@ -44,7 +53,7 @@ public class AuthenticationController : ControllerBase
         var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
         if (result.Succeeded)
         {
-            return Ok();
+            return Ok(user.UserName);
         }
         return BadRequest("Invalid username or password");
     }

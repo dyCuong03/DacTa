@@ -1,6 +1,8 @@
-﻿namespace SmartDevice.Models;
+﻿using SmartDevice.Models.Interfaces;
 
-public class PurchaseDetails
+namespace SmartDevice.Models;
+
+public class PurchaseDetails :IPurchaseDetails
 {
     public required string PurchaseInvoiceId { get; set; }
     public required string ProductId { get; set; }
