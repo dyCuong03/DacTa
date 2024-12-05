@@ -18,7 +18,7 @@ public class Product : IProduct
     [MaxLength(250)] public string? Voltage { get; set; }
     [MaxLength(250)] public string? Connectivity { get; set; }
     [MaxLength(250)] public string? Features { get; set; }
-    public byte[]? Image { get; set; }
+    public string? Image { get; set; }
     [MaxLength(250)] public string? Description { get; set; }
     public ProductType? ProductType { get; set; }
     public Brand? Brand { get; set; }

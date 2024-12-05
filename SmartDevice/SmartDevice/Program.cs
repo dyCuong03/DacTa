@@ -1,9 +1,12 @@
 using System.Text.Json.Serialization;
+using CloudinaryDotNet;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using SmartDevice.Datas;
 using SmartDevice.Installer;
 using SmartDevice.Models;
+using SmartDevice.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +23,20 @@ builder.Services.AddDbContext<ApplicationDbContext>(
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
+
+
+builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
+builder.Services.AddSingleton(sp =>
+{
+    var config = sp.GetRequiredService<IOptions<CloudinarySettings>>().Value;
+    var account = new Account(
+        config.CloudName,
+        config.ApiKey,
+        config.ApiSecret
+    );
+
+    return new Cloudinary(account);
+});
 
 builder.Services.AddControllers()
     .AddJsonOptions(options =>

@@ -49,8 +49,6 @@ public class SaleInvoiceController : ControllerBase
         {
             return StatusCode(500, new { message = "An error occurred while adding the sale invoice.", error = ex.Message });
         }
-        
-        
     }
     [HttpGet("{id}")]
     public async Task<IActionResult> GetSaleInvoiceById(string id)
@@ -61,6 +59,30 @@ public class SaleInvoiceController : ControllerBase
             return NotFound(new { message = "Sale invoice not found." });
         }
         return Ok(salesInvoice);
+    }
+    
+    [HttpDelete("{salesInvoiceId}")]
+    public async Task<IActionResult> DeleteSaleInvoice(string salesInvoiceId)
+    {
+        try
+        {
+            var salesInvoice = await _context.SalesInvoices.FindAsync(salesInvoiceId);
+        
+            if (salesInvoice == null)
+            {
+                return NotFound(new { message = "Sale invoice not found." });
+            }
+
+            _context.SalesInvoices.Remove(salesInvoice);
+        
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "Sale invoice deleted successfully." });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { message = "An error occurred while deleting the sale invoice.", error = ex.Message });
+        }
     }
 
 }

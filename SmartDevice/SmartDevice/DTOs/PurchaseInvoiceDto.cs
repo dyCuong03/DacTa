@@ -3,7 +3,7 @@ using SmartDevice.Models.Interfaces;
 
 namespace SmartDevice.DTOs;
 
-public class PurchaseInvoiceDto:IPurchaseInvoice
+public class PurchaseInvoiceDto : IPurchaseInvoice
 {
     public string PurchaseInvoiceId { get; set; }
     public DateTime InvoiceDate { get; set; }

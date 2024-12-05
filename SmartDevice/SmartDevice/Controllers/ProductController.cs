@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using SmartDevice.Datas;
 using SmartDevice.DTOs;
 using SmartDevice.Models;
+using SmartDevice.Service;
 
 namespace SmartDevice.Controllers;
 
@@ -11,6 +12,7 @@ namespace SmartDevice.Controllers;
 public class ProductController : ControllerBase
 {
     private readonly ApplicationDbContext _context;
+    private readonly IImageService _imageService;
 
     public ProductController(ApplicationDbContext context)
     {
@@ -26,12 +28,21 @@ public class ProductController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> InsertProduct([FromForm] ProductDto productDto)
     {
-        if (productDto.Image == null)
-            return BadRequest("Image is required.");
-
-        using var memoryStream = new MemoryStream();
-        await productDto.Image.CopyToAsync(memoryStream);
-
+        if (productDto == null) return BadRequest("foodimagDTo is null.");
+        string imgPath = null;
+        if (productDto.Image != null)
+        {
+                
+            var uploadResult = await _imageService.AddImageAsync(productDto.Image);
+            if (uploadResult.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                imgPath = uploadResult.SecureUrl.AbsoluteUri;
+            }
+            else
+            {
+                return StatusCode((int)uploadResult.StatusCode, "Image upload failed.");
+            }
+        }
         var product = new Product
         {
             ProductId = Guid.NewGuid()
@@ -40,7 +51,7 @@ public class ProductController : ControllerBase
             ProductTypeId = productDto.ProductTypeId,
             ProductName = productDto.ProductName,
             Description = productDto.Description,
-            Image = memoryStream.ToArray(),
+            Image = imgPath,
             SalePrice = productDto.SalePrice,
             Quantity = productDto.Quantity,
             Weight = productDto.Weight,

@@ -8,15 +8,16 @@ namespace SmartDevice.Controllers;
 
 [Route("api/[controller]/[action]")]
 [ApiController]
-public class ProductDetails : ControllerBase
+public class BrandController : ControllerBase
 {
     private readonly ApplicationDbContext _context;
 
-    public ProductDetails(ApplicationDbContext context)
+    public BrandController(ApplicationDbContext context)
     {
         _context = context;
     }
     
     [HttpGet]
-    public async Task<IActionResult> GetBrands() => Ok(await _context.Brands.ToListAsync());
+    public async Task<IActionResult> GetBrands() 
+        => Ok(await _context.Brand.ToListAsync());
 }
