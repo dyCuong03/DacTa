@@ -22,33 +22,23 @@ public class SaleInvoiceController : ControllerBase
             Task.FromResult<IActionResult>(Ok( _context.SalesInvoices.Where(o => o.SalesInvoiceId == salesInvoiceId)));
 
     [HttpPost]
-    public async Task<IActionResult> AddSaleInvoice([FromBody] SaleInvoiceDto salesInvoiceDto)
+    public async Task<IActionResult> AddSaleInvoice( SaleInvoice salesInvoiceDto)
     {
-        if (!ModelState.IsValid)
-        {
-            return BadRequest(ModelState);
-        }
-
-        try
-        {
             var salesInvoice = new SalesInvoice
             {
                 SalesInvoiceId = Guid.NewGuid().ToString(),
-                InvoiceDate = salesInvoiceDto.InvoiceDate,
-                TotalAmount = salesInvoiceDto.TotalAmount,
+                InvoiceDate = DateTime.Now,
+                TotalAmount = 0,
                 EmployeeId = salesInvoiceDto.EmployeeId,
                 CustomerId = salesInvoiceDto.CustomerId
             };
 
             _context.SalesInvoices.Add(salesInvoice);
             await _context.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(GetSaleInvoiceById), new { id = salesInvoice.SalesInvoiceId }, salesInvoice);
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, new { message = "An error occurred while adding the sale invoice.", error = ex.Message });
-        }
+            return Ok(salesInvoice);
+         
+        
+        
     }
     [HttpGet("{id}")]
     public async Task<IActionResult> GetSaleInvoiceById(string id)

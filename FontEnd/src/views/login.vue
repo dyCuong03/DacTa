@@ -37,13 +37,13 @@
  export default {
      data(){
         return{
-            username:'',
-            password:'',
+            username:'diep',
+            password:'Abc@123',
             imgUrl: "src/assets/img/login.jpg"
         }
      },
      mounted(){
-       // this.handleSubmit();
+        this.handleSubmit();
      },
 
      methods:{
@@ -57,7 +57,7 @@
                 password: this.password
             });
             if(response.status == 200){
-                this.$router.push({name:'shop'})
+                this.$router.push({name:'/'})
                 this.$store.commit('Set_Username', response.data)
             }
             

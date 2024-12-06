@@ -1,5 +1,6 @@
 import axiosClient from "../axiosClient";
 
+
 export async function GetUser({ commit}, userName){
     try {
         const response = await axiosClient.get(`Authentication/GetUser?userName=${userName}`);
@@ -10,7 +11,7 @@ export async function GetUser({ commit}, userName){
     }
 }
 
-export async function GetProducts({ commit}){
+export async function GetProducts({commit}){
     try {
         const response = await axiosClient.get(`Product/GetProducts`);
         commit('Set_Products', response.data.$values);
@@ -41,6 +42,15 @@ export async function GetCartDetail({ commit}, cartId){
     try {
         const response = await axiosClient.get(`SaleDetails/GetAllSaleDetail?saleInvoiceId=${cartId}`);
         commit('Set_CartDetail', response.data.$values);
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export async function GetCustomers({ commit}){
+    try {
+        const response = await axiosClient.get(`Customer/GetCustomers`);
+        commit('Set_Customers', response.data.$values);
     } catch (error) {
         console.log(error);
     }

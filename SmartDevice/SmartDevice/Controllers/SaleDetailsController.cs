@@ -19,14 +19,6 @@ public class SaleDetailsController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> AddSaleDetail([FromBody] SaleDetailsDto saleDetailsDto)
     {
-        var orderExists = _context.SalesDetails.SingleOrDefault(f => f.ProductId == saleDetailsDto.ProductId);
-        if (orderExists != null) return StatusCode(StatusCodes.Status409Conflict);
-        var product = _context.Products.SingleOrDefault(f => f.ProductId == saleDetailsDto.ProductId);
-            
-        if (product == null || product.Quantity < 0 ) return StatusCode(StatusCodes.Status404NotFound);
-            
-        if (saleDetailsDto.Amount > product.Quantity) return StatusCode(StatusCodes.Status400BadRequest);
-
         var newCartDetail = new SalesDetails
         {
             SalesInvoiceId = saleDetailsDto.SalesInvoiceId,
