@@ -126,15 +126,35 @@ export default {
       },
       cart: [], 
       showProducts: false,
-      submitted: false, // Đánh dấu khi form đã được submit
+      submitted: false, 
+      totalPrice:0
     };
   },
   computed: {
     ...mapState(["products", "customers", "user"]),
-    totalPrice() {
-      return this.cart.reduce((total, item) => total + (item.productPrice * item.quantity), 0).toFixed(2);
-    }
+    
   },
+  watch: {
+    cart: {
+  handler(newCart) {
+    console.log("Cart updated:", newCart); // Kiểm tra dữ liệu giỏ hàng
+
+    this.totalPrice = newCart.reduce((acc, element) => {
+      if (!element.salePrice || !element.quantity) {
+        console.warn("Invalid product data:", element);
+      console.log(element)
+
+      }
+      return acc + ((Number(element.salePrice) || 0) * (Number(element.quantity) || 0));
+    }, 0);
+
+    console.log("Total Price:", this.totalPrice); // Kiểm tra tổng tiền
+  },
+  deep: true,
+},
+},
+
+    
   async mounted(){
     await this.GetProducts();
     await this.GetCustomers().then(() => {
@@ -143,8 +163,19 @@ export default {
     if(this.user){
     this.form.employeeId = this.user.id;
     }
+   
   },
+
   methods: {
+    total() {
+    this.totalPrice = this.cart.reduce((acc, element) => {
+        return acc + (element.productPrice * element.quantity);
+    }, 0);
+
+       
+      
+                           
+    },
     ...mapActions(["GetProducts", "GetCustomers"]),
     submitForm() {
       if (!this.form.customerId) {
@@ -181,8 +212,14 @@ export default {
     if (this.cart.length > 0) {
         try {
             // Loại bỏ SalesInvoiceId nếu có
+            var saleInvoiced = {
+              employeeId: this.form.employeeId,
+              customerId: this.form.customerId,
+              totalAmount: this.totalPrice
+            };
+            console.log(saleInvoiced)
 
-            const response = await axiosClient.post('SaleInvoice/AddSaleInvoice', this.form);
+            const response = await axiosClient.post('SaleInvoice/AddSaleInvoice', saleInvoiced);
 
             if (response.status === 200) {
                 // Gửi chi tiết bán

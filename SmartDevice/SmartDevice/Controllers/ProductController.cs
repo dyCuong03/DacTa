@@ -68,4 +68,27 @@ public class ProductController : ControllerBase
 
         return Ok(new { Message = "Product added successfully", product.ProductId });
     }
+    
+    
+    
+    [HttpPost]
+    public async Task<IActionResult> Insert([FromBody] FormFile Img)
+    {
+        string imgPath = null;
+        if (Img != null)
+        {
+                
+            var uploadResult = await _imageService.AddImageAsync(Img);
+            if (uploadResult.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                imgPath = uploadResult.SecureUrl.AbsoluteUri;
+            }
+            else
+            {
+                return StatusCode((int)uploadResult.StatusCode, "Image upload failed.");
+            }
+        }
+     
+        return Ok(new { Message = "Product added successfully", imgPath });
+    }
 }

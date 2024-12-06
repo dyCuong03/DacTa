@@ -10255,28 +10255,25 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\htndi\\.nuget\\packages\\": {}
+    "C:\\Users\\duycu\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\htndi\\Downloads\\DacTa\\SmartDevice\\SmartDevice\\SmartDevice.csproj",
+      "projectUniqueName": "D:\\Dacta\\SmartDevice\\SmartDevice\\SmartDevice.csproj",
       "projectName": "SmartDevice",
-      "projectPath": "C:\\Users\\htndi\\Downloads\\DacTa\\SmartDevice\\SmartDevice\\SmartDevice.csproj",
-      "packagesPath": "C:\\Users\\htndi\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\htndi\\Downloads\\DacTa\\SmartDevice\\SmartDevice\\obj\\",
+      "projectPath": "D:\\Dacta\\SmartDevice\\SmartDevice\\SmartDevice.csproj",
+      "packagesPath": "C:\\Users\\duycu\\.nuget\\packages\\",
+      "outputPath": "D:\\Dacta\\SmartDevice\\SmartDevice\\obj\\",
       "projectStyle": "PackageReference",
       "UsingMicrosoftNETSdk": false,
       "configFilePaths": [
-        "C:\\Users\\htndi\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        "C:\\Users\\duycu\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
       ],
       "sources": {
-        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -10358,7 +10355,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.300/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.402/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

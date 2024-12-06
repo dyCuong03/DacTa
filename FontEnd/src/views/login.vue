@@ -37,27 +37,27 @@
  export default {
      data(){
         return{
-            username:'diep',
-            password:'Abc@123',
+            username:'',
+            password:'',
             imgUrl: "src/assets/img/login.jpg"
         }
      },
      mounted(){
-        this.handleSubmit();
+       this.handleSubmit();
      },
 
      methods:{
         async handleSubmit(){
-            if(!this.username || !this.password){
-                alert('Please fill all the fields')
-            }
+            // if(!this.username || !this.password){
+            //     alert('Please fill all the fields')
+            // }
           
             const response = await axiosClient.post(`Authentication/Login`,{
-                username: this.username,
-                password: this.password
+                username: "cuong1",
+                password: "Abc@123"
             });
             if(response.status == 200){
-                this.$router.push({name:'/'})
+                this.$router.push({name:'product'})
                 this.$store.commit('Set_Username', response.data)
             }
             

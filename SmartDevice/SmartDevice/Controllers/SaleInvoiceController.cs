@@ -28,7 +28,7 @@ public class SaleInvoiceController : ControllerBase
             {
                 SalesInvoiceId = Guid.NewGuid().ToString(),
                 InvoiceDate = DateTime.Now,
-                TotalAmount = 0,
+                TotalAmount = salesInvoiceDto.TotalAmount,
                 EmployeeId = salesInvoiceDto.EmployeeId,
                 CustomerId = salesInvoiceDto.CustomerId
             };

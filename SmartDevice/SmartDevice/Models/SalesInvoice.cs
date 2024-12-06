@@ -6,7 +6,7 @@ namespace SmartDevice.Models;
 public class SalesInvoice: ISaleInvoice
 {
     [Key]
-    public string? SalesInvoiceId { get; set; }
+    public required string? SalesInvoiceId { get; set; }
     public DateTime InvoiceDate { get; set; }
     public decimal TotalAmount { get; set; }
     public required string EmployeeId { get; set; }
