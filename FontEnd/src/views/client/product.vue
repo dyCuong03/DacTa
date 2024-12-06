@@ -5,7 +5,7 @@
   <div class="flex flex-col items-center justify-center min-h-screen px-5">
   <div class="grid grid-flow-row md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-10 max-w-6xl" v-if="products">
     <div class="shadow-lg rounded-lg w-70" v-for="(product, index) in products" :key="index">
-      <p class="flex justify-center w-full" ><img :src="product.productImage" alt="" class="w-44 h-40" @click="ProductView(product.productId)"></p>
+      <p class="flex justify-center w-full" ><img :src="product.image" alt="" class="w-44 h-40" @click="ProductView(product.productId)"></p>
       <div class="p-6 flex justify-center w-full">
         <h3>{{ product.productName }}</h3>
         
@@ -51,7 +51,7 @@
 
   <!-- Hiển thị ảnh sản phẩm -->
   <div class="flex justify-center mb-4">
-    <img :src="selectedProduct.productImage" alt="Product Image" class="w-32 h-32 object-cover">
+    <img :src="selectedProduct.image" alt="Product Image" class="w-32 h-32 object-cover">
   </div>
 
   <!-- Hiển thị tên sản phẩm -->

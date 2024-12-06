@@ -182,6 +182,8 @@ export default {
         console.log(purchaseDetail);
             await axiosClient.post('PurchaseDetails/AddPurchaseDetail', purchaseDetail);
         });
+
+                        alert("Purchase completed!");
       } catch (error) {
         console.error('Error submitting form:', error);
       }

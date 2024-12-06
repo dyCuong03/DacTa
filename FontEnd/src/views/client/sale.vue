@@ -59,7 +59,7 @@
             class="flex items-center justify-between p-2 border-b"
           >
             <div class="flex items-center">
-              <img :src="item.productImage" alt="" class="w-12 h-12 mr-4" />
+              <img :src="item.image" alt="" class="w-12 h-12 mr-4" />
               <span>{{ item.productName }}</span>
             </div>
             <div class="flex items-center space-x-2">
@@ -97,7 +97,7 @@
           v-for="(product, index) in products"
           :key="index"
         >
-          <img :src="product.productImage" alt="" class="w-32 h-32 mx-auto" />
+          <img :src="product.image" alt="" class="w-32 h-32 mx-auto" />
           <h3 class="text-center mt-2">{{ product.productName }}</h3>
           <p class="text-center text-sm text-gray-600">Quantity: {{ product.quantity }}</p>
           <p class="text-center text-sm text-gray-800 font-semibold">Price: ${{ product.salePrice }}</p> <!-- Giá sản phẩm -->
@@ -231,11 +231,10 @@ export default {
                     };
                     console.log("Sale detail:", saledetail);
                     const saleDetailResponse = await axiosClient.post('SaleDetails/AddSaleDetail', saledetail);
-                    if (saleDetailResponse.status === 200) {
+      
+                }
                         alert("Sale completed!");
                         this.cart = [];  // Giỏ hàng trống sau khi bán
-                    }
-                }
             }
         } catch (error) {
             console.error("Error:", error);
