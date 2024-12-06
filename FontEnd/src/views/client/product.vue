@@ -98,7 +98,6 @@ data(){
     showModal: false,
     selectedProduct: null,
     quantity: 1,
-
   }
 },
 computed: {
@@ -108,17 +107,18 @@ async mounted() {
   await this.GetProducts().then(() => {
     console.log("Products loaded:", this.products);
   });
-
-  await this.GetCart(this.user.id).then(() => {
-    this.GetCartDetail(this.cart[0].orderId).then(() =>{
+  if(this.user){
+    await this.GetCart(this.user.id).then(() => {
+      console.log("Car000000t loaded:", this.user);
+    this.GetCartDetail(this.cart.orderId).then(() =>{
+      console.log("CartDetail loaded:", this.cartdetail);
     })
   });
+  }
+  
 },
 methods: {
   ...mapActions(['GetProducts', 'GetCart', 'GetCartDetail']),
-  async ProductView(ProductId) {
-      this.$router.push({ name: 'ProductDetail', params: { id: ProductId } });
-    },
   addToCart(product) {
     if (product) {
       this.selectedProduct = product;
@@ -135,10 +135,10 @@ methods: {
   },
   async confirmAddToCart() {
     const cartItem = {
-      orderId: this.cart[0].orderId,
+      orderId: this.cart.orderId,
       productId: this.selectedProduct.productId,
       quantity: this.quantity,
-    };
+  }
 try {
   console.log("Cart item:", cartItem);
   const response = await axiosClient.post(`OrderDetail/AddCartDetail`, cartItem);
@@ -149,10 +149,11 @@ try {
   if (error.response) {
     switch (error.response.status) {
       case 400:
-        alert("Số lượng không hợp lệ!");
+        alert("Số lượng không hợp lệ!");  
         break;
       case 409:
-        const detail = this.cartdetail.find(detail => detail.orderId === this.cart[0].orderId && detail.productId ===  this.selectedProduct.productId);
+        const detail = this.cartdetail.find(detail => detail.orderId === this.cart.orderId && detail.productId ===  this.selectedProduct.productId);
+        console.log("Cart ___detail:", this.cartdetail);
         var cardetailUP = {
           orderId: detail.orderId,
           productId: this.selectedProduct.productId,
