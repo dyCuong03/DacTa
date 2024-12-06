@@ -18,16 +18,8 @@ public class PurchaseDetailsController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> AddPurchaseDetail([FromBody] PurchaseDetails purchaseDetailsDto)
+    public async Task<IActionResult> AddPurchaseDetail([FromBody] PurchaseDetailsDto purchaseDetailsDto)
     {
-        var orderExists = _context.PurchaseDetails.SingleOrDefault(f => f.ProductId == purchaseDetailsDto.ProductId);
-        if (orderExists != null) return StatusCode(StatusCodes.Status409Conflict);
-        var product = _context.Products.SingleOrDefault(f => f.ProductId == purchaseDetailsDto.ProductId);
-
-        if (product == null || product.Quantity < 0) return StatusCode(StatusCodes.Status404NotFound);
-
-        if (purchaseDetailsDto.Amount > product.Quantity) return StatusCode(StatusCodes.Status400BadRequest);
-
         var newCartDetail = new PurchaseDetails
         {
             PurchaseInvoiceId = purchaseDetailsDto.PurchaseInvoiceId,   

@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SmartDevice")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1b82ac7a4612696c235d3eb739aaab72c1ea9d62")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+225ea76144bf15b31ed02ce0838a6edfd4326c78")]
 [assembly: System.Reflection.AssemblyProductAttribute("SmartDevice")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SmartDevice")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

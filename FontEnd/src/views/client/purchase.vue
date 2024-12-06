@@ -24,8 +24,8 @@
           class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
           <option value="" disabled>Select a supplier</option>
-          <option v-for="supplier in suppliers" :key="supplier.id" :value="supplier.id">
-            {{ supplier.name }}
+          <option v-for="supplier in suppliers" :key="supplier.supplierId" :value="supplier.supplierId">
+            {{ supplier.supplierName }}
           </option>
         </select>
       </div>
@@ -49,10 +49,11 @@
               :id="'product-' + index"
               v-model="product.productId"
               class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              @change="updateTotalAmount"  
             >
               <option value="" disabled>Select a product</option>
-              <option v-for="productOption in products" :key="productOption.id" :value="productOption.id">
-                {{ productOption.name }}
+              <option v-for="productOption in products" :key="productOption.productId" :value="productOption.productId">
+                {{ productOption.productName }}
               </option>
             </select>
           </div>
@@ -65,6 +66,7 @@
               v-model="product.quantity"
               class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Enter quantity"
+              @input="updateTotalAmount"  
             />
           </div>
           <!-- Remove Product Button -->
@@ -76,6 +78,10 @@
             Remove
           </button>
         </div>
+      </div>
+      <!-- Total Amount -->
+      <div class="mt-4">
+        <span class="font-bold">Total Amount: </span>{{ totalAmount }}
       </div>
       <!-- Submit Button -->
       <div class="mt-4">
@@ -91,6 +97,9 @@
 </template>
 
 <script>
+import axiosClient from '../../axiosClient';
+import { mapState } from 'vuex';
+
 export default {
   data() {
     return {
@@ -99,26 +108,51 @@ export default {
         supplierId: null,
         products: [], // Danh sách sản phẩm được thêm
       },
-      suppliers: [
-        { id: "S001", name: "Supplier A" },
-        { id: "S002", name: "Supplier B" },
-        { id: "S003", name: "Supplier C" },
-      ],
-      products: [
-        { id: "P001", name: "Product A" },
-        { id: "P002", name: "Product B" },
-        { id: "P003", name: "Product C" },
-      ],
+      suppliers: [],
+      products: [],  // Product data fetched from the API
+      totalAmount: 0,  // Tổng số tiền
     };
   },
+  computed: {
+    ...mapState(['user']),
+  },
+  mounted() {
+    this.fetchSuppliers();
+    this.fetchProduct();
+  },
   methods: {
+    async fetchSuppliers() {
+      try {
+        const response = await axiosClient.get('Supplier/GetSupplier');
+        this.suppliers = response.data.$values;
+      } catch (error) {
+        console.error('Error fetching suppliers:', error);
+      }
+    },
+    async fetchProduct() {
+      try {
+        const response = await axiosClient.get('/Product/GetProducts');
+        this.products = response.data.$values;
+      } catch (error) {
+        console.error('Error fetching products:', error);
+      }
+    },
     addProductRow() {
-      this.form.products.push({ productId: "", quantity: null });
+      this.form.products.push({ productId: "", quantity: 1, price: 0 });
+      this.updateTotalAmount();  // Update total when a new product is added
     },
     removeProductRow(index) {
       this.form.products.splice(index, 1);
+      this.updateTotalAmount();  // Update total after removing a product
     },
-    submitForm() {
+    updateTotalAmount() {
+      this.totalAmount = this.form.products.reduce((total, product) => {
+        const productDetails = this.products.find(p => p.productId === product.productId);
+        const productPrice = productDetails ? productDetails.salePrice : 0;  // Using SalePrice from API
+        return total + (product.quantity * productPrice);  // Calculate total
+      }, 0);
+    },
+    async submitForm() {
       if (!this.form.supplierId) {
         alert("Please select a supplier.");
         return;
@@ -127,13 +161,35 @@ export default {
         alert("Please add at least one product.");
         return;
       }
-      console.log("Form Submitted:", this.form);
-      // Thực hiện hành động submit
+      const purchaseInvoiceDto = {
+        PurchaseInvoiceId: "",
+        InvoiceDate: new Date().toISOString(),
+        TotalAmount: this.totalAmount, 
+        EmployeeId: this.user.id,
+      };
+
+      console.log("Submitting form with payload:", purchaseInvoiceDto); 
+
+      try {
+        var response = await axiosClient.post('PurchaseInvoice/AddPurchaseInvoice', purchaseInvoiceDto);
+        this.form.products.forEach(async element =>  {
+          const purchaseDetail = {
+            purchaseInvoiceId: response.data.purchaseInvoiceId,
+            productId : element.productId,
+            amount : element.quantity,
+            supplierId : this.form.supplierId
+        };
+        console.log(purchaseDetail);
+            await axiosClient.post('PurchaseDetails/AddPurchaseDetail', purchaseDetail);
+        });
+      } catch (error) {
+        console.error('Error submitting form:', error);
+      }
     },
   },
 };
 </script>
 
 <style scoped>
-/* Tùy chỉnh thêm nếu cần */
+/* Custom styling if needed */
 </style>
