@@ -9,3 +9,6 @@ export function Set_Username(state, username) {
 export function Set_Products(state, products) {
     state.products = products;
 }
+export function Set_Customers(state, customers) {
+    state.customers = customers;
+}

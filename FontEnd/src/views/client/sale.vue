@@ -10,7 +10,7 @@
           <input
             id="invoiceDate"
             type="text"
-            :value="form.invoiceDate"
+            :value="invoiceDate"
             readonly
             class="w-full px-3 py-2 border rounded-lg bg-gray-100 text-gray-600"
           />
@@ -24,8 +24,8 @@
             class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="" disabled>Select a customer</option>
-            <option v-for="customer in customers" :key="customer.id" :value="customer.id">
-              {{ customer.name }}
+            <option v-for="customer in customers" :key="customer.customerId" :value="customer.customerId">
+              {{ customer.customerName }}
             </option>
           </select>
         </div>
@@ -100,7 +100,7 @@
           <img :src="product.productImage" alt="" class="w-32 h-32 mx-auto" />
           <h3 class="text-center mt-2">{{ product.productName }}</h3>
           <p class="text-center text-sm text-gray-600">Quantity: {{ product.quantity }}</p>
-          <p class="text-center text-sm text-gray-800 font-semibold">Price: ${{ product.productPrice }}</p> <!-- Giá sản phẩm -->
+          <p class="text-center text-sm text-gray-800 font-semibold">Price: ${{ product.salePrice }}</p> <!-- Giá sản phẩm -->
           <button
             class="w-full mt-2 bg-green-500 text-white py-1 rounded-lg hover:bg-green-600"
             @click="addToCart(product)"
@@ -114,34 +114,38 @@
 </template>
 
 <script>
+  import { mapState, mapActions } from "vuex";
+  import axiosClient from "../../axiosClient";
 export default {
   data() {
     return {
-      form: {
-        invoiceDate: new Date().toLocaleString(),
-        customerId: null,
+      invoiceDate:  new Date().toISOString(),
+      form:{
+        employeeId: '',
+        customerId: '',
       },
-      customers: [
-        { id: "C001", name: "John Doe" },
-        { id: "C002", name: "Jane Smith" },
-        { id: "C003", name: "Alice Johnson" },
-      ],
-      products: [
-        { productId: 1, productName: "Product A", quantity: 10, productPrice: 100, productImage: "image-a.jpg" },
-        { productId: 2, productName: "Product B", quantity: 5, productPrice: 200, productImage: "image-b.jpg" },
-        { productId: 3, productName: "Product C", quantity: 2, productPrice: 300, productImage: "image-c.jpg" },
-      ],
-      cart: [], // Giỏ hàng
+      cart: [], 
       showProducts: false,
       submitted: false, // Đánh dấu khi form đã được submit
     };
   },
   computed: {
+    ...mapState(["products", "customers", "user"]),
     totalPrice() {
       return this.cart.reduce((total, item) => total + (item.productPrice * item.quantity), 0).toFixed(2);
     }
   },
+  async mounted(){
+    await this.GetProducts();
+    await this.GetCustomers().then(() => {
+      console.log("Customers loaded:", this.customers);
+    });
+    if(this.user){
+    this.form.employeeId = this.user.id;
+    }
+  },
   methods: {
+    ...mapActions(["GetProducts", "GetCustomers"]),
     submitForm() {
       if (!this.form.customerId) {
         alert("Please select a customer.");
@@ -170,17 +174,44 @@ export default {
     removeFromCart(item) {
       this.cart = this.cart.filter((cartItem) => cartItem.productId !== item.productId);
     },
-    processSale() {
-      if (this.cart.length > 0) {
-        alert("Sale completed!");
-        // Here you can handle the sale logic (e.g., saving the sale, updating inventory, etc.)
-        this.cart = []; // Clear the cart after sale
-      }
-    },
+    async processSale() {
+    console.log("Processing sale:", this.form);
+
+    // Kiểm tra xem giỏ hàng có sản phẩm không
+    if (this.cart.length > 0) {
+        try {
+            // Loại bỏ SalesInvoiceId nếu có
+
+            const response = await axiosClient.post('SaleInvoice/AddSaleInvoice', this.form);
+
+            if (response.status === 200) {
+                // Gửi chi tiết bán
+                for (const element of this.cart) {
+                   const saledetail = {
+                      salesInvoiceId: response.data.salesInvoiceId,
+                        productId: element.productId,
+                        amount: element.quantity  ,
+                    };
+                    console.log("Sale detail:", saledetail);
+                    const saleDetailResponse = await axiosClient.post('SaleDetails/AddSaleDetail', saledetail);
+                    if (saleDetailResponse.status === 200) {
+                        alert("Sale completed!");
+                        this.cart = [];  // Giỏ hàng trống sau khi bán
+                    }
+                }
+            }
+        } catch (error) {
+            console.error("Error:", error);
+            alert("An error occurred while processing the sale. Please try again.");
+        }
+    }
+  },
+
+
     removeForm() {
       this.form.customerId = null;
       this.submitted = false;
-      this.cart = []; // Clear the cart when remove is clicked
+      this.cart = [];
       this.showProducts = false;
     }
   },
@@ -188,5 +219,4 @@ export default {
 </script>
 
 <style scoped>
-/* Add custom styles here */
 </style>
